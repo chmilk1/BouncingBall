@@ -1,5 +1,8 @@
 package sec;
 
+import java.awt.Point;
+import java.awt.PointerInfo;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Random;
 
@@ -8,7 +11,18 @@ class Model extends Observable {
     private int xPosition = 0;
     private int yPosition = 0;
     private int xLimit, yLimit;
-    Random rand = new Random();
+    private int xMaxSpeed = 5;
+    private int score = 0;
+    ArrayList<Point> hits = new ArrayList<Point>();
+    public int getScore() {
+		return score;
+	}
+
+	public void addScore(int score) {
+		this.score += score;
+	}
+
+	Random rand = new Random();
     public int getyLimit() {
 		return yLimit;
 	}
@@ -34,6 +48,11 @@ class Model extends Observable {
         return yPosition;
     }
     
+    public void hit(){
+    	xDelta -= 20;
+    	score += 1;
+    	System.out.println("Hit");
+    }
     public void resetSpeed(){
     	xDelta = 6;
     	yDelta = 4;
@@ -56,6 +75,11 @@ class Model extends Observable {
         xPosition += xDelta;
         if (xPosition < 0 || xPosition >= xLimit) {
         	bounce();
+        	if (xDelta < 0) {
+				xDelta += 1;
+			} else {
+				xDelta -= 1;
+			}
             xDelta = -xDelta;
             xPosition += xDelta;
             if (rand.nextInt(25) == 12) {
